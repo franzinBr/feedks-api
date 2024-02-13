@@ -6,8 +6,12 @@ services:
     restart: unless-stopped
     hostname: postgres
     env_file: .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:${DB_PORT}"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -18,6 +22,10 @@ services:
     hostname: api
     env_file: .env
     ports:
-      - "8080:8080"
+      - "${PORT}:${PORT}"
     depends_on:
       - postgres
+
+volumes:
+  pgdata:
+    driver: local
