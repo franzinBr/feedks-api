@@ -1,6 +1,9 @@
 package db
 
-import "github.com/franzinBr/feedks-api/data/models"
+import (
+	"github.com/franzinBr/feedks-api/data/db/seed"
+	"github.com/franzinBr/feedks-api/data/models"
+)
 
 func Migrate() {
 	database := GetDB()
@@ -11,4 +14,5 @@ func Migrate() {
 		&models.Feedback{},
 	)
 
+	seed.AutoSeed(database)
 }
