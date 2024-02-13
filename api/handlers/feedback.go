@@ -35,7 +35,9 @@ func (h *FeedBackHandler) CreateFeedBack(c *gin.Context) {
 
 	userId := c.GetString("x-user-id")
 
-	if err := h.service.CreateFeedBack(req, userId); err != nil {
+	feedback, err := h.service.CreateFeedBack(req, userId)
+
+	if err != nil {
 		c.AbortWithStatusJSON(errors.GetStatusCodeFromError(err),
 			gin.H{
 				"sucess":  false,
@@ -46,8 +48,8 @@ func (h *FeedBackHandler) CreateFeedBack(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
-		"sucess":  true,
-		"message": "Feedback created with sucess",
+		"sucess": true,
+		"data":   feedback,
 	})
 }
 

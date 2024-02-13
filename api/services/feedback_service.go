@@ -23,10 +23,10 @@ func NewFeedBackService() *FeedBackService {
 	}
 }
 
-func (s *FeedBackService) CreateFeedBack(req *dtos.CreateFeedBackRequest, userId string) error {
+func (s *FeedBackService) CreateFeedBack(req *dtos.CreateFeedBackRequest, userId string) (*dtos.FeedBackResponse, error) {
 	var user models.User
 	if err := s.Db.First(&user, userId).Error; err != nil {
-		return &errors.ApiError{Message: "Error on get user", StatusCode: http.StatusInternalServerError}
+		return nil, &errors.ApiError{Message: "Error on get user", StatusCode: http.StatusInternalServerError}
 	}
 
 	feedBack := models.Feedback{
@@ -38,12 +38,19 @@ func (s *FeedBackService) CreateFeedBack(req *dtos.CreateFeedBackRequest, userId
 
 	if err := tx.Create(&feedBack).Error; err != nil {
 		tx.Rollback()
-		return &errors.ApiError{Message: "Error in create Feedback", StatusCode: http.StatusInternalServerError}
+		return nil, &errors.ApiError{Message: "Error in create Feedback", StatusCode: http.StatusInternalServerError}
 	}
 
 	tx.Commit()
 
-	return nil
+	return &dtos.FeedBackResponse{
+		ID:      feedBack.ID,
+		Comment: feedBack.Comment,
+		User: dtos.UserFeedBack{
+			ID:       user.ID,
+			Username: user.Username,
+		},
+	}, nil
 }
 
 func (s *FeedBackService) ListFeedBacks(req *dtos.PaginationRequest, userId string) (*dtos.PaginationResponse[dtos.FeedBackResponse], error) {
