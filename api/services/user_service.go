@@ -34,7 +34,7 @@ func (s *UserService) CreateUser(req *dtos.CreateUserRequest) error {
 		return &errors.ApiError{Message: "user with this email already exists", StatusCode: http.StatusBadRequest}
 	}
 
-	if r := s.Db.Where("user_name = ?", req.UserName).First(&models.User{}); r.RowsAffected > 0 {
+	if r := s.Db.Where("username = ?", req.Username).First(&models.User{}); r.RowsAffected > 0 {
 		return &errors.ApiError{Message: "user with this username already exists", StatusCode: http.StatusBadRequest}
 	}
 
@@ -47,7 +47,7 @@ func (s *UserService) CreateUser(req *dtos.CreateUserRequest) error {
 	user := models.User{
 		FirstName: req.FirstName,
 		LastName:  req.LastName,
-		UserName:  req.UserName,
+		Username:  req.Username,
 		Email:     req.Email,
 		Password:  string(hashPass),
 		RoleID:    int(defaultRole.ID),
@@ -69,7 +69,7 @@ func (s *UserService) CreateUser(req *dtos.CreateUserRequest) error {
 func (s *UserService) Login(req *dtos.LoginRequest) (*dtos.TokenResponse, error) {
 	var user models.User
 
-	if err := s.Db.Where("user_name = ?", req.Username).First(&user).Error; err != nil {
+	if err := s.Db.Where("username = ?", req.Username).First(&user).Error; err != nil {
 		return nil, &errors.ApiError{Message: "Username or password is invalid", StatusCode: http.StatusBadRequest}
 	}
 

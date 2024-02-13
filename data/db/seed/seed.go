@@ -53,7 +53,7 @@ func All() []Seed {
 				db.Create(&models.User{
 					FirstName: "Admin",
 					LastName:  "Admin",
-					UserName:  "admin",
+					Username:  "admin",
 					Email:     "admin@admin.com.br",
 					Password:  string(hashPass),
 					RoleID:    int(adminRole.ID),

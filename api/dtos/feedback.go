@@ -6,7 +6,7 @@ type CreateFeedBackRequest struct {
 
 type UserFeedBack struct {
 	ID       uint   `json:"id"`
-	UserName string `json:"userName"`
+	Username string `json:"username"`
 }
 
 type FeedBackResponse struct {

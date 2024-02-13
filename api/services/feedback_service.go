@@ -72,7 +72,7 @@ func (s *FeedBackService) ListFeedBacks(req *dtos.PaginationRequest, userId stri
 			Comment: feedback.Comment,
 			User: dtos.UserFeedBack{
 				ID:       feedback.User.ID,
-				UserName: feedback.User.UserName,
+				Username: feedback.User.Username,
 			},
 		})
 	}
