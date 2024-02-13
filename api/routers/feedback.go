@@ -10,4 +10,5 @@ func FeedBack(r *gin.RouterGroup) {
 
 	r.POST("/", h.CreateFeedBack)
 	r.GET("/", h.ListFeedBacks)
+	r.DELETE("/:id", h.DeleteFeedback)
 }

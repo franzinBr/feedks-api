@@ -4,6 +4,10 @@ type CreateFeedBackRequest struct {
 	Comment string `json:"comment" binding:"required"`
 }
 
+type DeleteFeedbackRequest struct {
+	ID uint `uri:"id" binding:"required"`
+}
+
 type UserFeedBack struct {
 	ID       uint   `json:"id"`
 	Username string `json:"username"`

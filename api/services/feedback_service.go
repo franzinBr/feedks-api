@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/franzinBr/feedks-api/api/dtos"
@@ -80,4 +81,31 @@ func (s *FeedBackService) ListFeedBacks(req *dtos.PaginationRequest, userId stri
 	paginationResponse.Items = &feedbacksResponse
 
 	return paginationResponse, nil
+}
+
+func (s *FeedBackService) DeleteFeedback(req *dtos.DeleteFeedbackRequest, userId string) error {
+	var user models.User
+	if err := s.Db.Preload("Role").First(&user, userId).Error; err != nil {
+		return &errors.ApiError{Message: "Error on get user", StatusCode: http.StatusInternalServerError}
+	}
+
+	var feedBack models.Feedback
+	if err := s.Db.Preload("User").First(&feedBack, req.ID).Error; err != nil {
+		return &errors.ApiError{Message: fmt.Sprintf("Feedback %d Not Found", req.ID), StatusCode: http.StatusNotFound}
+	}
+
+	if feedBack.UserID != int(user.ID) && user.Role.Name != constants.AdminRole {
+		return &errors.ApiError{Message: fmt.Sprintf("You cannot delete this feedback %d", req.ID), StatusCode: http.StatusForbidden}
+	}
+
+	tx := s.Db.Begin()
+
+	if err := tx.Delete(&feedBack).Error; err != nil {
+		tx.Rollback()
+		return &errors.ApiError{Message: "Error on delete Feedback", StatusCode: http.StatusInternalServerError}
+	}
+
+	tx.Commit()
+
+	return nil
 }

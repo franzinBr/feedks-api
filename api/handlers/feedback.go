@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/franzinBr/feedks-api/api/dtos"
@@ -80,6 +81,38 @@ func (h *FeedBackHandler) ListFeedBacks(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"sucess": true,
 		"data":   feedbacks,
+	})
+
+}
+
+func (h *FeedBackHandler) DeleteFeedback(c *gin.Context) {
+	req := new(dtos.DeleteFeedbackRequest)
+
+	if err := c.ShouldBindUri(&req); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{
+				"sucess":  false,
+				"message": err.Error(),
+			},
+		)
+		return
+	}
+
+	userId := c.GetString("x-user-id")
+
+	if err := h.service.DeleteFeedback(req, userId); err != nil {
+		c.AbortWithStatusJSON(errors.GetStatusCodeFromError(err),
+			gin.H{
+				"sucess":  false,
+				"message": err.Error(),
+			},
+		)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"sucess":  true,
+		"message": fmt.Sprintf("Feedback %d deleted with sucess", req.ID),
 	})
 
 }
