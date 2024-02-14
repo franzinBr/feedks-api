@@ -44,8 +44,9 @@ func (s *FeedBackService) CreateFeedBack(req *dtos.CreateFeedBackRequest, userId
 	tx.Commit()
 
 	return &dtos.FeedBackResponse{
-		ID:      feedBack.ID,
-		Comment: feedBack.Comment,
+		ID:        feedBack.ID,
+		Comment:   feedBack.Comment,
+		CreatedAt: feedBack.CreatedAt.String(),
 		User: dtos.UserFeedBack{
 			ID:       user.ID,
 			Username: user.Username,
@@ -76,8 +77,9 @@ func (s *FeedBackService) ListFeedBacks(req *dtos.PaginationRequest, userId stri
 	for _, feedback := range feedbacks {
 
 		feedbacksResponse = append(feedbacksResponse, &dtos.FeedBackResponse{
-			ID:      feedback.ID,
-			Comment: feedback.Comment,
+			ID:        feedback.ID,
+			Comment:   feedback.Comment,
+			CreatedAt: feedback.CreatedAt.String(),
 			User: dtos.UserFeedBack{
 				ID:       feedback.User.ID,
 				Username: feedback.User.Username,

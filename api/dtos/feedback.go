@@ -14,7 +14,8 @@ type UserFeedBack struct {
 }
 
 type FeedBackResponse struct {
-	ID      uint         `json:"id"`
-	Comment string       `json:"comment"`
-	User    UserFeedBack `json:"user,omitempty"`
+	ID        uint         `json:"id"`
+	Comment   string       `json:"comment"`
+	CreatedAt string       `json:"created_at"`
+	User      UserFeedBack `json:"user,omitempty"`
 }
