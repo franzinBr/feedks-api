@@ -13,6 +13,8 @@ import (
 func InitServer() {
 	r := gin.Default()
 
+	r.Use(middlewares.Cors())
+
 	registerRoutes(r)
 
 	err := r.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
