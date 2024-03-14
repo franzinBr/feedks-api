@@ -78,7 +78,7 @@ func (s *UserService) Login(req *dtos.LoginRequest) (*dtos.TokenResponse, error)
 	}
 
 	tokenClaims := map[string]any{
-		"id": user.ID,
+		"id": strconv.FormatUint(uint64(user.ID), 10),
 	}
 
 	acess_exp, err := strconv.Atoi(os.Getenv("JWT_ACCESS_TOKEN_EXPIRY_HOUR"))
