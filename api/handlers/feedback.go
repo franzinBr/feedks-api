@@ -33,9 +33,9 @@ func (h *FeedBackHandler) CreateFeedBack(c *gin.Context) {
 		return
 	}
 
-	userId := c.GetString("x-user-id")
+	userId, _ := c.Get("x-user-id")
 
-	feedback, err := h.service.CreateFeedBack(req, userId)
+	feedback, err := h.service.CreateFeedBack(req, userId.(string))
 
 	if err != nil {
 		c.AbortWithStatusJSON(errors.GetStatusCodeFromError(err),
@@ -66,9 +66,9 @@ func (h *FeedBackHandler) ListFeedBacks(c *gin.Context) {
 		return
 	}
 
-	userId := c.GetString("x-user-id")
+	userId, _ := c.Get("x-user-id")
 
-	feedbacks, err := h.service.ListFeedBacks(req, userId)
+	feedbacks, err := h.service.ListFeedBacks(req, userId.(string))
 
 	if err != nil {
 		c.AbortWithStatusJSON(errors.GetStatusCodeFromError(err),
@@ -100,9 +100,9 @@ func (h *FeedBackHandler) DeleteFeedback(c *gin.Context) {
 		return
 	}
 
-	userId := c.GetString("x-user-id")
+	userId, _ := c.Get("x-user-id")
 
-	if err := h.service.DeleteFeedback(req, userId); err != nil {
+	if err := h.service.DeleteFeedback(req, userId.(string)); err != nil {
 		c.AbortWithStatusJSON(errors.GetStatusCodeFromError(err),
 			gin.H{
 				"sucess":  false,
