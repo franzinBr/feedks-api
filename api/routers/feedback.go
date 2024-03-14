@@ -8,7 +8,7 @@ import (
 func FeedBack(r *gin.RouterGroup) {
 	h := handlers.NewFeedBackHandler()
 
-	r.POST("/", h.CreateFeedBack)
-	r.GET("/", h.ListFeedBacks)
+	r.POST("", h.CreateFeedBack)
+	r.GET("", h.ListFeedBacks)
 	r.DELETE("/:id", h.DeleteFeedback)
 }
