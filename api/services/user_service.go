@@ -70,11 +70,11 @@ func (s *UserService) Login(req *dtos.LoginRequest) (*dtos.TokenResponse, error)
 	var user models.User
 
 	if err := s.Db.Where("username = ?", req.Username).First(&user).Error; err != nil {
-		return nil, &errors.ApiError{Message: "Username or password is invalid", StatusCode: http.StatusBadRequest}
+		return nil, &errors.ApiError{Message: "Username or password is invalid", StatusCode: http.StatusUnauthorized}
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
-		return nil, &errors.ApiError{Message: "Username or password is invalid", StatusCode: http.StatusBadRequest}
+		return nil, &errors.ApiError{Message: "Username or password is invalid", StatusCode: http.StatusUnauthorized}
 	}
 
 	tokenClaims := map[string]any{
